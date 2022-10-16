@@ -11,27 +11,15 @@ pub mod complex64_simd;
 pub mod polynomials;
 
 fn main() {
-    let p = [(0.0, 0.0), (-3.0, 0.0), (0.0, 0.0), (1.0, 0.0)];
+    let p = [(-1.0, 0.0), (0.0, 0.0), (0.0, 0.0), (1.0, 0.0)];
 
     let x = C64Simd {
-        re: Simd::from([1.5, 2.5, 2.0, 2.0, 1.5, 1.5, 2.5, 2.5]),
+        re: Simd::from([-0.5, 0.5, 0.0, 0.0, -0.5, -0.5, 0.5, 0.5]),
         im: Simd::from([0.0, 0.0, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5]),
     };
 
     let t = Instant::now();
-    println!("{x:7.4?}\n");
-    let x = newton::<8, 3, 1>(x, &p);
-    println!("{x:7.4?}\n");
-    let x = newton::<8, 3, 1>(x, &p);
-    println!("{x:7.4?}\n");
-    let x = newton::<8, 3, 1>(x, &p);
-    println!("{x:7.4?}\n");
-    let x = newton::<8, 3, 1>(x, &p);
-    println!("{x:7.4?}\n");
-    let x = newton::<8, 3, 1>(x, &p);
-    println!("{x:7.4?}\n");
-    let x = newton::<8, 3, 1>(x, &p);
-    println!("{x:7.4?}\n");
+    let x = newton::<8, 3, 100000000>(x, &p);
     let t = t.elapsed();
 
     println!("{x:7.4?}\ntook {t:?}");
