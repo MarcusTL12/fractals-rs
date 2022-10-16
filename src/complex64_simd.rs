@@ -21,7 +21,7 @@ where
     #[inline(always)]
     pub fn mul_add(self, a: Self, b: Self) -> Self {
         Self {
-            re: self.im.mul_add(-a.re, self.re.mul_add(a.re, b.re)),
+            re: self.im.mul_add(-a.im, self.re.mul_add(a.re, b.re)),
             im: self.re.mul_add(a.im, self.im.mul_add(a.re, b.im)),
         }
     }

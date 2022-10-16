@@ -19,8 +19,20 @@ fn main() {
     };
 
     let t = Instant::now();
-    let x = newton::<8, 3, 1000000000>(x, &p);
+    println!("{x:7.4?}\n");
+    let x = newton::<8, 3, 1>(x, &p);
+    println!("{x:7.4?}\n");
+    let x = newton::<8, 3, 1>(x, &p);
+    println!("{x:7.4?}\n");
+    let x = newton::<8, 3, 1>(x, &p);
+    println!("{x:7.4?}\n");
+    let x = newton::<8, 3, 1>(x, &p);
+    println!("{x:7.4?}\n");
+    let x = newton::<8, 3, 1>(x, &p);
+    println!("{x:7.4?}\n");
+    let x = newton::<8, 3, 1>(x, &p);
+    println!("{x:7.4?}\n");
     let t = t.elapsed();
 
-    println!("{x:?}\ntook {t:?}");
+    println!("{x:7.4?}\ntook {t:?}");
 }
