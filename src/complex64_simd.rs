@@ -2,7 +2,7 @@ use std::{
     ops::{
         Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign,
     },
-    simd::{LaneCount, Simd, StdFloat, SupportedLaneCount},
+    simd::{LaneCount, Simd, StdFloat, SupportedLaneCount, Mask},
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -42,6 +42,14 @@ where
     #[inline(always)]
     pub fn abs(self) -> Simd<f64, LANES> {
         self.abssqr().sqrt()
+    }
+
+    #[inline(always)]
+    pub fn select(self, other: Self, m: Mask<i64, LANES>) -> Self {
+        Self {
+            re: m.select(self.re, other.re),
+            im: m.select(self.im, other.im),
+        }
     }
 }
 

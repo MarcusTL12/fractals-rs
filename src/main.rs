@@ -5,10 +5,10 @@
 use std::{simd::Simd, time::Instant};
 
 use complex64_simd::C64Simd;
-
-use crate::polynomials::{newton_checked, polyder};
+use polynomials::{newton_checked, polyder};
 
 pub mod complex64_simd;
+pub mod mandelbrot;
 pub mod polynomials;
 
 fn main() {
