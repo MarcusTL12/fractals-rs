@@ -2,7 +2,7 @@ use std::{
     ops::{
         Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign,
     },
-    simd::{LaneCount, Simd, StdFloat, SupportedLaneCount, Mask},
+    simd::{LaneCount, Mask, Simd, StdFloat, SupportedLaneCount},
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -68,12 +68,49 @@ where
     }
 }
 
+impl<const LANES: usize> Add<Simd<f64, LANES>> for C64Simd<LANES>
+where
+    LaneCount<LANES>: SupportedLaneCount,
+{
+    type Output = Self;
+
+    #[inline(always)]
+    fn add(self, rhs: Simd<f64, LANES>) -> Self::Output {
+        Self {
+            re: self.re + rhs,
+            im: self.im,
+        }
+    }
+}
+
+impl<const LANES: usize> Add<C64Simd<LANES>> for Simd<f64, LANES>
+where
+    LaneCount<LANES>: SupportedLaneCount,
+{
+    type Output = C64Simd<LANES>;
+
+    #[inline(always)]
+    fn add(self, rhs: C64Simd<LANES>) -> Self::Output {
+        rhs + self
+    }
+}
+
 impl<const LANES: usize> AddAssign for C64Simd<LANES>
 where
     LaneCount<LANES>: SupportedLaneCount,
 {
     #[inline(always)]
     fn add_assign(&mut self, rhs: Self) {
+        *self = *self + rhs;
+    }
+}
+
+impl<const LANES: usize> AddAssign<Simd<f64, LANES>> for C64Simd<LANES>
+where
+    LaneCount<LANES>: SupportedLaneCount,
+{
+    #[inline(always)]
+    fn add_assign(&mut self, rhs: Simd<f64, LANES>) {
         *self = *self + rhs;
     }
 }
@@ -108,12 +145,52 @@ where
     }
 }
 
+impl<const LANES: usize> Sub<Simd<f64, LANES>> for C64Simd<LANES>
+where
+    LaneCount<LANES>: SupportedLaneCount,
+{
+    type Output = Self;
+
+    #[inline(always)]
+    fn sub(self, rhs: Simd<f64, LANES>) -> Self::Output {
+        Self {
+            re: self.re - rhs,
+            im: self.im,
+        }
+    }
+}
+
+impl<const LANES: usize> Sub<C64Simd<LANES>> for Simd<f64, LANES>
+where
+    LaneCount<LANES>: SupportedLaneCount,
+{
+    type Output = C64Simd<LANES>;
+
+    #[inline(always)]
+    fn sub(self, rhs: C64Simd<LANES>) -> Self::Output {
+        C64Simd {
+            re: self - rhs.re,
+            im: -rhs.im,
+        }
+    }
+}
+
 impl<const LANES: usize> SubAssign for C64Simd<LANES>
 where
     LaneCount<LANES>: SupportedLaneCount,
 {
     #[inline(always)]
     fn sub_assign(&mut self, rhs: Self) {
+        *self = *self - rhs;
+    }
+}
+
+impl<const LANES: usize> SubAssign<Simd<f64, LANES>> for C64Simd<LANES>
+where
+    LaneCount<LANES>: SupportedLaneCount,
+{
+    #[inline(always)]
+    fn sub_assign(&mut self, rhs: Simd<f64, LANES>) {
         *self = *self - rhs;
     }
 }
@@ -133,12 +210,49 @@ where
     }
 }
 
+impl<const LANES: usize> Mul<Simd<f64, LANES>> for C64Simd<LANES>
+where
+    LaneCount<LANES>: SupportedLaneCount,
+{
+    type Output = Self;
+
+    #[inline(always)]
+    fn mul(self, rhs: Simd<f64, LANES>) -> Self::Output {
+        Self {
+            re: self.re * rhs,
+            im: self.im * rhs,
+        }
+    }
+}
+
+impl<const LANES: usize> Mul<C64Simd<LANES>> for Simd<f64, LANES>
+where
+    LaneCount<LANES>: SupportedLaneCount,
+{
+    type Output = C64Simd<LANES>;
+
+    #[inline(always)]
+    fn mul(self, rhs: C64Simd<LANES>) -> Self::Output {
+        rhs * self
+    }
+}
+
 impl<const LANES: usize> MulAssign for C64Simd<LANES>
 where
     LaneCount<LANES>: SupportedLaneCount,
 {
     #[inline(always)]
     fn mul_assign(&mut self, rhs: Self) {
+        *self = *self * rhs;
+    }
+}
+
+impl<const LANES: usize> MulAssign<Simd<f64, LANES>> for C64Simd<LANES>
+where
+    LaneCount<LANES>: SupportedLaneCount,
+{
+    #[inline(always)]
+    fn mul_assign(&mut self, rhs: Simd<f64, LANES>) {
         *self = *self * rhs;
     }
 }
@@ -160,12 +274,54 @@ where
     }
 }
 
+impl<const LANES: usize> Div<Simd<f64, LANES>> for C64Simd<LANES>
+where
+    LaneCount<LANES>: SupportedLaneCount,
+{
+    type Output = Self;
+
+    #[inline(always)]
+    fn div(self, rhs: Simd<f64, LANES>) -> Self::Output {
+        Self {
+            re: self.re / rhs,
+            im: self.im / rhs,
+        }
+    }
+}
+
+impl<const LANES: usize> Div<C64Simd<LANES>> for Simd<f64, LANES>
+where
+    LaneCount<LANES>: SupportedLaneCount,
+{
+    type Output = C64Simd<LANES>;
+
+    #[inline(always)]
+    fn div(self, rhs: C64Simd<LANES>) -> Self::Output {
+        let denom = rhs.abssqr();
+
+        C64Simd {
+            re: self * rhs.re / denom,
+            im: -self * rhs.im / denom,
+        }
+    }
+}
+
 impl<const LANES: usize> DivAssign for C64Simd<LANES>
 where
     LaneCount<LANES>: SupportedLaneCount,
 {
     #[inline(always)]
     fn div_assign(&mut self, rhs: Self) {
+        *self = *self / rhs;
+    }
+}
+
+impl<const LANES: usize> DivAssign<Simd<f64, LANES>> for C64Simd<LANES>
+where
+    LaneCount<LANES>: SupportedLaneCount,
+{
+    #[inline(always)]
+    fn div_assign(&mut self, rhs: Simd<f64, LANES>) {
         *self = *self / rhs;
     }
 }
