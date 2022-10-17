@@ -33,6 +33,16 @@ where
             im: Simd::splat(im),
         }
     }
+
+    #[inline(always)]
+    pub fn abssqr(self) -> Simd<f64, LANES> {
+        self.im.mul_add(self.im, self.re * self.re)
+    }
+
+    #[inline(always)]
+    pub fn abs(self) -> Simd<f64, LANES> {
+        self.abssqr().sqrt()
+    }
 }
 
 impl<const LANES: usize> Add for C64Simd<LANES>
@@ -133,7 +143,7 @@ where
 
     #[inline(always)]
     fn div(self, rhs: Self) -> Self::Output {
-        let denom = rhs.im.mul_add(rhs.im, rhs.re * rhs.re);
+        let denom = rhs.abssqr();
 
         Self {
             re: self.im.mul_add(rhs.im, self.re * rhs.re) / denom,
