@@ -2,7 +2,7 @@
 #![feature(generic_const_exprs)]
 #![allow(incomplete_features)]
 
-use fractal_image::make_grad;
+use fractal_image::test_grad;
 
 pub mod complex64_simd;
 pub mod mandelbrot;
@@ -35,5 +35,5 @@ fn main() {
 
     // println!("{:8.5?}\n{:8.5?}\ntook {t:?}", x.re, x.im);
 
-    make_grad();
+    test_grad();
 }
