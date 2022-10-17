@@ -43,12 +43,32 @@ where
     pub fn abs(self) -> Simd<f64, LANES> {
         self.abssqr().sqrt()
     }
+}
 
+pub trait C64SimdSelect<const LANES: usize>
+where
+    LaneCount<LANES>: SupportedLaneCount,
+{
+    fn cselect(
+        self,
+        trues: C64Simd<LANES>,
+        falses: C64Simd<LANES>,
+    ) -> C64Simd<LANES>;
+}
+
+impl<const LANES: usize> C64SimdSelect<LANES> for Mask<i64, LANES>
+where
+    LaneCount<LANES>: SupportedLaneCount,
+{
     #[inline(always)]
-    pub fn select(self, other: Self, m: Mask<i64, LANES>) -> Self {
-        Self {
-            re: m.select(self.re, other.re),
-            im: m.select(self.im, other.im),
+    fn cselect(
+        self,
+        trues: C64Simd<LANES>,
+        falses: C64Simd<LANES>,
+    ) -> C64Simd<LANES> {
+        C64Simd {
+            re: self.select(trues.re, falses.re),
+            im: self.select(trues.im, falses.im),
         }
     }
 }
