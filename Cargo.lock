@@ -57,6 +57,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3d7b894f5411737b7867f4827955924d7c254fc9f4d91a6aad6b097804b1018b"
 
 [[package]]
+name = "complex-simd"
+version = "0.1.0"
+source = "git+https://github.com/MarcusTL12/complex-simd-rs#e80c1c59f1105176700a63a5a70023b65a624849"
+dependencies = [
+ "simd-math",
+]
+
+[[package]]
 name = "crc32fast"
 version = "1.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -162,6 +170,7 @@ dependencies = [
 name = "fractals-rs"
 version = "0.1.0"
 dependencies = [
+ "complex-simd",
  "image",
 ]
 
@@ -453,6 +462,11 @@ name = "scopeguard"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d29ab0c6d3fc0ee92fe66e2d99f700eab17a8d57d1c1d3b748380fb20baa78cd"
+
+[[package]]
+name = "simd-math"
+version = "0.1.0"
+source = "git+https://github.com/MarcusTL12/simd-math-rs#a14d0589f56ae3774214b286d0c547b79d8a34f9"
 
 [[package]]
 name = "smallvec"

@@ -103,3 +103,7 @@ where
         },
     )
 }
+
+pub fn complex_to_hsv(re: f64, im: f64) {
+    
+}

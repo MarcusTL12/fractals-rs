@@ -2,22 +2,20 @@ use std::simd::{
     LaneCount, Simd, SimdFloat, SimdPartialOrd, SupportedLaneCount,
 };
 
-use crate::complex64_simd::C64Simd;
+use complex_simd::SimdComplex;
 
 #[inline(always)]
 pub fn polyval<const LANES: usize, const N: usize>(
-    x: C64Simd<LANES>,
+    x: SimdComplex<Simd<f64, LANES>>,
     p: &[(f64, f64); N],
-) -> C64Simd<LANES>
+) -> SimdComplex<Simd<f64, LANES>>
 where
     LaneCount<LANES>: SupportedLaneCount,
 {
-    let mut xn = C64Simd::splat((1.0, 0.0));
-    let mut acc = C64Simd::splat((0.0, 0.0));
+    let mut acc = SimdComplex::<Simd<f64, LANES>>::splat(p[N - 1]);
 
-    for &c in p {
-        acc = xn.mul_add(C64Simd::splat(c), acc);
-        xn *= x;
+    for &c in p[..N - 1].iter().rev() {
+        acc = x.mul_add(acc, SimdComplex::<Simd<f64, LANES>>::splat(c));
     }
 
     acc
@@ -37,10 +35,10 @@ pub fn polyder<const N: usize>(p: &[(f64, f64); N + 1]) -> [(f64, f64); N] {
 }
 
 pub fn newton<const LANES: usize, const D: usize, const ITERS: usize>(
-    mut x: C64Simd<LANES>,
+    mut x: SimdComplex<Simd<f64, LANES>>,
     p: &[(f64, f64); D + 1],
     dp: &[(f64, f64); D],
-) -> C64Simd<LANES>
+) -> SimdComplex<Simd<f64, LANES>>
 where
     LaneCount<LANES>: SupportedLaneCount,
 {
@@ -52,12 +50,12 @@ where
 }
 
 pub fn newton_checked<const LANES: usize, const D: usize, const ITERS: usize>(
-    mut x: C64Simd<LANES>,
+    mut x: SimdComplex<Simd<f64, LANES>>,
     p: &[(f64, f64); D + 1],
     dp: &[(f64, f64); D],
     macroiters: usize,
     tol: f64,
-) -> C64Simd<LANES>
+) -> SimdComplex<Simd<f64, LANES>>
 where
     LaneCount<LANES>: SupportedLaneCount,
 {

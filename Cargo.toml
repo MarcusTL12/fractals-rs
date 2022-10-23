@@ -6,4 +6,5 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+complex-simd = { git = "https://github.com/MarcusTL12/complex-simd-rs" }
 image = "0.24"

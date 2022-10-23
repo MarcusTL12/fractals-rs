@@ -1,11 +1,11 @@
 use std::simd::{LaneCount, Simd, SimdPartialOrd, SupportedLaneCount};
 
-use crate::complex64_simd::{C64Simd, C64SimdSelect};
+use complex_simd::{SimdComplex, SimdComplexSelect};
 
 pub fn mandelbrot<const LANES: usize, const ITERS: usize>(
-    mut z: C64Simd<LANES>,
-    c: C64Simd<LANES>,
-) -> (C64Simd<LANES>, Simd<i64, LANES>)
+    mut z: SimdComplex<Simd<f64, LANES>>,
+    c: SimdComplex<Simd<f64, LANES>>,
+) -> (SimdComplex<Simd<f64, LANES>>, Simd<i64, LANES>)
 where
     LaneCount<LANES>: SupportedLaneCount,
 {
